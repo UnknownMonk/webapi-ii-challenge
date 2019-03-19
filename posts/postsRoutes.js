@@ -41,7 +41,7 @@ router.get('/:id', (req, res) => {
 
     .then(posts => {
       if (id) {
-        res.status(200).json({ 'Here are your posts': posts });
+        res.status(200).json({ Posts: posts });
       } else {
         res
           .status(404)
@@ -51,7 +51,24 @@ router.get('/:id', (req, res) => {
     .catch(err => {
       res
         .status()
-        .json({ error: 'The posts information could not be retrieved.' });
+        .json({ message: 'The post with the specified ID does not exist.' });
+    });
+});
+
+router.delete('/:id', (req, res) => {
+  const id = req.params.id;
+  db.remove(id)
+    .then(removePost => {
+      if (removePost) {
+        res.status(200).json(removePost);
+      } else {
+        res
+          .status(404)
+          .json({ message: 'The post with the specified ID does not exist.' });
+      }
+    })
+    .catch(err => {
+      res.status(500).json({ error: 'The post could not be removed' });
     });
 });
 
